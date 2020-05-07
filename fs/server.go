@@ -12,11 +12,16 @@ import (
 //     http.ListenAndServe(":80", br.Serve("public"))
 //
 func (br *Broccoli) Serve(dir string) http.Handler {
+	srv := br.NewServer(dir)
+	return http.FileServer(srv)
+}
+
+func (br *Broccoli) NewServer(dir string) *Server {
 	srv := &Server{
 		br:     br,
 		prefix: strings.Trim(dir, "/"),
 	}
-	return http.FileServer(srv)
+	return srv
 }
 
 // Server implements a http.FileSystem and provides
